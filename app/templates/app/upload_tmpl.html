@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Photo Corrector</title>
+    </head>
+    <body>
+    <div style="margin-left: 500px; margin-top: 100px">
+        <h1 style="color: darkgoldenrod">Upload Picture</h1>
+
+{#        <form id="user_form" method="post" action="/photo_corrector/upload/"#}
+{#              enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            {{user_form.as_p}}#}
+{#            <input type="submit" name ="submit" value="Upload Picture" />#}
+{#        </form>#}
+        <form action="/photo_corrector/upload/" method="post" enctype="multipart/form-data">
+        {%csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Run">
+        </form>
+{#        {% for img in vegetable.images.all %}#}
+{#        {% get_media_prefix %}#}
+        {% if img.picture %}
+            <img style="width: 350px; height: 350px" src="{% get_media_prefix %}/photos/{{ img.picture }}" />
+{#            <img class="" src="{{ img.picture.url }}" />#}
+{#        <img class="" src="{% get_media_prefix %}{{ img.picture }}"/>#}
+{#                {{ img.picture.url }}#}
+
+        {% endif %}
+{#    {% endfor %}#}
+    </div>
+</form>
+    </body>
+</html>
+
+{#<img src="{{ some_model.some_image_field.url }}" />#}
+
+
+{#<img class="cat" src="/media/{{ person.img }}" />#}
