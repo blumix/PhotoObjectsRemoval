@@ -29,9 +29,15 @@
 {#                {{ img.picture.url }}#}
 
         {% endif %}
+        </br>
+        {% for num in range %}
+        {% csrf_token %}
+        <input type="radio">
+        {% endfor %}
+
+
 {#    {% endfor %}#}
     </div>
-</form>
     </body>
 </html>
 
