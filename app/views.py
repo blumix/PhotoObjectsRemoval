@@ -60,7 +60,7 @@ def upload(request):
         #     print("img", pic.picture)
     else:
         form = PictureForm()
-    return render(request, 'app/upload_tmpl.html', {'form': form, 'img': img})
+    return render(request, 'app/upload_tmpl.html', {'form': form, 'img': img, 'range': range(5)})
     # try:
     #     form = PictureForm()
     #     person = Person.objects.get(pk=person_id)
