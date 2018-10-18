@@ -31,8 +31,9 @@
         {% endif %}
         </br>
         {% for num in range %}
+        {{ forloop.counter }}
         {% csrf_token %}
-        <input type="radio">
+        <input type="radio" value="">
         {% endfor %}
 
 
