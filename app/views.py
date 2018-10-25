@@ -100,7 +100,7 @@ def send_info(request):
                 continue
         print("buttons_ind", buttons_ind, img)
 
-        ready_img = transform_img(img)
+
         # f = {"upFile": "data:%sbase64,%s" % (mime, encoded)}
         # tmp = Photo(picture=ready_img)
         # tmp.save()
@@ -110,6 +110,14 @@ def send_info(request):
         print("first_photo", first_photo)
         all_pics = Photo.objects.all()
         print("all_pics", all_pics)
+
+        ready_img = transform_img(last_photo)
+        print("ready_img", ready_img, type(ready_img))
+
+        # tmp_obj = Photo(picture=your_pic)
+        # tmp_obj.save()
+
+
         return render(request, 'app/ready_img.html', {'last_photo': last_photo})
 
     return render(request, 'app/ready_img.html', f)
