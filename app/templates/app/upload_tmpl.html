@@ -1,45 +1,68 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Photo Corrector</title>
-    </head>
-    <body>
-    <div style="margin-left: 500px; margin-top: 100px">
-        <h1 style="color: darkgoldenrod">Upload Picture</h1>
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Corrector</title>
+    <script src="{% static 'js/send_info.js' %}"></script>
+</head>
+<body>
+<div style="margin-left: 500px; margin-top: 100px">
+    <h1 style="color: darkgoldenrod">Upload Picture</h1>
 
-{#        <form id="user_form" method="post" action="/photo_corrector/upload/"#}
-{#              enctype="multipart/form-data">#}
-{#            {% csrf_token %}#}
-{#            {{user_form.as_p}}#}
-{#            <input type="submit" name ="submit" value="Upload Picture" />#}
-{#        </form>#}
-        <form action="/photo_corrector/upload/" method="post" enctype="multipart/form-data">
-        {%csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Run">
-        </form>
-{#        {% for img in vegetable.images.all %}#}
-{#        {% get_media_prefix %}#}
-        {% if img.picture %}
-            <img style="width: 350px; height: 350px" src="{% get_media_prefix %}/photos/{{ img.picture }}" />
-{#            <img class="" src="{{ img.picture.url }}" />#}
-{#        <img class="" src="{% get_media_prefix %}{{ img.picture }}"/>#}
-{#                {{ img.picture.url }}#}
-
-        {% endif %}
-        </br>
-        {% for num in range %}
-        {{ forloop.counter }}
+    {#        <form id="user_form" method="post" action="/photo_corrector/upload/"#}
+    {#              enctype="multipart/form-data">#}
+    {#            {% csrf_token %}#}
+    {#            {{user_form.as_p}}#}
+    {#            <input type="submit" name ="submit" value="Upload Picture" />#}
+    {#        </form>#}
+    <form action="/photo_corrector/upload/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="radio" value="">
+        {{ form.as_p }}
+        <input type="submit" value="Show picture">
+    </form>
+    {#        {% for img in vegetable.images.all %}#}
+    {#        {% get_media_prefix %}#}
+    {% if img.picture %}
+        <img style="width: 350px; height: 350px" src="{% get_media_prefix %}/photos/{{ img.picture }}"/>
+        {#            <img class="" src="{{ img.picture.url }}" />#}
+        {#        <img class="" src="{% get_media_prefix %}{{ img.picture }}"/>#}
+        {#                {{ img.picture.url }}#}
+
+    {% endif %}
+    </br>
+    <form action="/photo_corrector/send_info/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for num in range %}
+            {{ forloop.counter }}
+            <input type="checkbox" name="{{ num }}_of_{{ max }}">
+            {% if inputs.value %}
+                <div>btrbrt</div>
+            {% endif %}
         {% endfor %}
+        <button id="button" class="btn btn-primary" type="submit">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            Run
+        </button>
+        <input value="{% get_media_prefix %}/photos/{{ img.picture }}" name="img" type="hidden">
+{#                <input value="{{ form }}" name="form" type="hidden">#}
+    </form>
+    </br>
+
+    {#        <form action="/photo_corrector/send_info/{{ img }}">#}
+    {#        {%csrf_token %}#}
+    {#        <input type="submit" value="Run">#}
+    {#        </form>#}
+
+    {#        <button id="button" data-catid="{{day.id}}" class="btn btn-primary" type="button">#}
+    {#            <span class="glyphicon glyphicon-thumbs-up"></span>#}
+    {#            Run#}
+    {#        </button>#}
 
 
-{#    {% endfor %}#}
-    </div>
-    </body>
+    {#    {% endfor %}#}
+</div>
+</body>
 </html>
 
 {#<img src="{{ some_model.some_image_field.url }}" />#}
