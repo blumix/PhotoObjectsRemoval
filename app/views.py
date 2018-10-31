@@ -1,4 +1,5 @@
 from base64 import b64encode
+import random
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -47,13 +48,20 @@ def upload(request):
         if form.is_valid():
             img = request.FILES
             print("valid", img, type(img), img['picture'], type(img['picture']))
-            photo = form.save()
-            if 'img' in request.FILES:
-                print("img in request.FILES")
-                photo.picture = request.FILES['picture']
+            print("photo", img['picture'])
+            # img['picture'] = 'some_picture.jpg'
+            # print("photo2", img['picture'])
+            photo = form.save(commit=False)
+            # photo.picture = 'test.jpeg'
+            photo.name = str(random.randint(1, 10000)) + 'picture' + str(random.randint(1, 50000))
             photo.save()
-            last_photo = Photo.objects.last()
-            print("last_photo", last_photo)
+            print("photo", photo.name)
+            # if 'img' in request.FILES:
+            #     print("img in request.FILES")
+            #     photo.picture = request.FILES['picture']
+            # photo.save()
+            # last_photo = Photo.objects.last()
+            # print("last_photo", last_photo)
         else:
             print (form.errors)
 
@@ -62,7 +70,7 @@ def upload(request):
         #     print("img", pic.picture)
     else:
         form = PictureForm()
-    return render(request, 'app/upload_tmpl.html', {'form': form, 'img': img, 'range': range(5), 'max': 5})
+    return render(request, 'app/upload_tmpl.html', {'form': form, 'img': img, 'range': range(5), 'max': 5, 'file_name': photo.name})
 
 
 def transform_img(img):
@@ -81,6 +89,8 @@ def send_info(request):
         print("img", img, type(img), request.POST)
         img3 = request.FILES
         print("request.FILES", request.FILES)
+        file_name = request.POST.get('file_name', None)
+        print("file_name", file_name)
         # print("img ", img, type(img))
         # data = img.read()
         # encoded = b64encode(data)
@@ -104,7 +114,11 @@ def send_info(request):
         # f = {"upFile": "data:%sbase64,%s" % (mime, encoded)}
         # tmp = Photo(picture=ready_img)
         # tmp.save()
-        last_photo = Photo.objects.order_by('date').last().picture
+        last_obj = Photo.objects.order_by('date').last()
+        print("last_obj", last_obj.name)
+        name = 'test_name2'
+        # last_photo = Photo.objects.order_by('date').last().picture
+        last_photo = Photo.objects.filter(name=file_name).last().picture
         print("last_photo", last_photo)
         first_photo = Photo.objects.order_by('date').first().picture
         print("first_photo", first_photo)
