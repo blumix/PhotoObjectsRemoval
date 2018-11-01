@@ -3,6 +3,10 @@ import random
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+import os
 
 from app.forms import PictureForm
 from .models import Photo
@@ -32,45 +36,18 @@ def get_short_url(request):
 def upload(request):
     print("upload def called")
     if request.method == 'POST':
-        print ("post")
         form = PictureForm(request.POST, request.FILES)
-        # img = request.FILES['picture']
-        print("files", request.FILES)
-
-        # if form.is_valid():
-        #     user = form.save()
-        #     user.set_password(user.password)
-        #     user.save()
-        #     if 'img' in request.FILES:
-        #         user.img = request.FILES['img']
-        #     user.save()
-
         if form.is_valid():
-            img = request.FILES
-            print("valid", img, type(img), img['picture'], type(img['picture']))
-            print("photo", img['picture'])
-            # img['picture'] = 'some_picture.jpg'
-            # print("photo2", img['picture'])
-            photo = form.save(commit=False)
-            # photo.picture = 'test.jpeg'
-            photo.name = str(random.randint(1, 10000)) + 'picture' + str(random.randint(1, 50000))
-            photo.save()
-            print("photo", photo.name)
-            # if 'img' in request.FILES:
-            #     print("img in request.FILES")
-            #     photo.picture = request.FILES['picture']
-            # photo.save()
-            # last_photo = Photo.objects.last()
-            # print("last_photo", last_photo)
+            if 'picture' not in request.FILES:
+                return render(request, 'app/upload_tmpl.html', {'form': form})
+            data = request.FILES['picture']
+            path = default_storage.save('tmp/' + str(random.randint(1, 10000)) + "/init", ContentFile(data.read()))
+            print ("Path", path)
         else:
             print (form.errors)
-
-        # pics = Photo.objects.all()
-        # for pic in pics:
-        #     print("img", pic.picture)
     else:
         form = PictureForm()
-    return render(request, 'app/upload_tmpl.html', {'form': form, 'img': img, 'range': range(5), 'max': 5, 'file_name': photo.name})
+    return render(request, 'app/upload_tmpl.html', {'form': form, 'range': range(5), 'max': 5, 'file_name':path})
 
 
 def transform_img(img):
