@@ -38,7 +38,7 @@ class InferenceConfig(coco.CocoConfig):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
     
-def find_masks (image):
+def find_masks_impl (image):
     config = InferenceConfig()
     config.display()
 
@@ -59,13 +59,11 @@ def find_masks (image):
     return results[0]
 
 
-def main ():
-    pic_folder = sys.argv[1] + "/"
+def find_masks (pic_folder):
     image = skimage.io.imread(pic_folder + "init")
-    r = find_masks (image)
+    r = find_masks_impl (image)
 
     for i in range (len (r['rois'])):
         np.save (pic_folder + "mask" + str (i), r['masks'][:][:][i])
-
-    
-main ()
+    return len (r['rois'])
+print ("Masks found:", find_masks (sys.argv[1]))

@@ -12,7 +12,6 @@ from app.forms import PictureForm
 from .models import Photo
 # from photo_corrector.urls import urlpatterns
 
-
 def index(request):
     print("upload def called")
     form = PictureForm()
@@ -41,13 +40,16 @@ def upload(request):
             if 'picture' not in request.FILES:
                 return render(request, 'app/upload_tmpl.html', {'form': form})
             data = request.FILES['picture']
-            path = default_storage.save('tmp/' + str(random.randint(1, 10000)) + "/init", ContentFile(data.read()))
-            print ("Path", path)
+            path_to_folder = 'tmp/' + str(random.randint(1, 10000)) + "/";
+            default_storage.save(path_to_folder + "init", ContentFile(data.read()))
+            command = 'docker container run -it  -v ~/:/host a6033db4efbeb4181bd9f6a87e8bc70a1f9e03c72c03c00bbdc1a352ddd8d735 python3 /host/PhotoObjectsRemoval/scripts/find_mask.py ' + '/host/PhotoObjectsRemoval/media/' + path_to_folder
+            print ("Going to execute:", command)
+            os.system (command)
         else:
             print (form.errors)
     else:
         form = PictureForm()
-    return render(request, 'app/upload_tmpl.html', {'form': form, 'range': range(5), 'max': 5, 'file_name':path})
+    return render(request, 'app/upload_tmpl.html', {'form': form, 'range': range(5), 'max': 5, 'img_path':path_to_folder})
 
 
 def transform_img(img):
