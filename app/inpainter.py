@@ -35,10 +35,10 @@ def inpaint(image, mask, fast=1):
     mask = np.array(mask)
     
     if (not fast):
-        image[mask==1] = [255, 0, 255]
+        image[mask==True] = [255, 0, 255]
     else:
         maskImage = np.zeros(image.shape)
-        maskImage[mask==1] = [255, 255, 255]
+        maskImage[mask==True] = [255, 255, 255]
         cv2.imwrite(maskPath, maskImage)
     
     cv2.imwrite(imagePath, image)

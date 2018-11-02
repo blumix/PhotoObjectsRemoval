@@ -23,7 +23,7 @@
         {% csrf_token %}
         {% for num in range %}
             {{ forloop.counter }}
-            <img style="width: 350px; height: 350px" src="{% get_media_prefix %}{{ img_path }}mask_{{num}}"/>
+            <img style="width: 350px; height: 350px" src="{% get_media_prefix %}{{ img_path }}mask_pic_{{num}}.png"/>
             <input type="checkbox" name="{{ num }}_of_{{ max }}">
             {% if inputs.value %}
                 <div>btrbrt</div>
