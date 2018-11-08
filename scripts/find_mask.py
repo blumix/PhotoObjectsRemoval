@@ -46,6 +46,7 @@ def find_masks (pic_folder):
         mask = r['masks'][:,:,i]
         maskImage = np.zeros(image.shape)
         maskImage[mask==True] = [255, 255, 255]
+        maskImage = expandMask(maskImage, 20)
         
         cv2.imwrite (pic_folder + "mask_" + str (i) + ".jpg", maskImage)
        
@@ -53,4 +54,13 @@ def find_masks (pic_folder):
         skimage.io.imsave (pic_folder + "mask_pic_" + str (i) + ".png", masked_image)
     return N
 
+def expandMask(mask, n):
+    result = np.zeros(mask.shape)
+    
+    for i in range(mask.shape[0]):
+        for j in range(mask.shape[1]):
+            result[i, j, :] = np.max(mask[max(0, i-n):min(mask.shape[0], i+n), max(0, j-n):min(mask.shape[1], j+n), :])
+    
+    return result
+    
 print ("Masks found:", find_masks (sys.argv[1]))
