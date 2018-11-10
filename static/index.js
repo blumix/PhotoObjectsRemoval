@@ -82,16 +82,21 @@ function wipePixels(event) {
 	var image = ctx.getImageData(0, 0, W, H)
 	var data = image.data
 
+	var maskImage = maskCtx.getImageData(0, 0, W, H)
+
 	pos_x = event.offsetX?(event.offsetX):event.pageX-img.offsetLeft
 	pos_y = event.offsetY?(event.offsetY):event.pageY-img.offsetTop
 
 	// TODO: fix index out of bounds
 	for (var j = pos_x - r; j < pos_x + r; j++) {
 		for (var i = pos_y - r; i < pos_y + r; i++) {
-			data[i * 4 * image.width + j * 4] = 255
-			data[i * 4 * image.width + j * 4 + 1] = 255
-			data[i * 4 * image.width + j * 4 + 2] = 255
-			data[i * 4 * image.width + j * 4 + 3] = 255
+			data[i * 4 * W + j * 4] = 255
+			data[i * 4 * W + j * 4 + 1] = 255
+			data[i * 4 * W + j * 4 + 2] = 255
+
+			maskImage.data[i * 4 * W] = 255
+			maskImage.data[i * 4 * W + 1] = 255
+			maskImage.data[i * 4 * W + 2] = 255
 		}
 	}
 
