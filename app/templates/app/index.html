@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Corrector</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var H = 480;
+        var W = 600;
+
+        // eraser radius
+        var r = 10;
+
+        var mask = document.createElement('canvas')
+        var maskCtx = mask.getContext('2d')
+        var source = document.createElement('canvas')
+        var sourceCtx = source.getContext('2d') 
+    </script>
+    <script language="JavaScript" src="{% static 'index.js' %}"></script>
+</head>
+<body>
+<div>
+    <h1 style="color: darkgoldenrod">Upload Picture</h1>
+    <input type="file" id="sourceImage" onchange="initImage(this)">
+    <br>
+    <div id="mainBlock" style="display: none">
+        <table>
+            <tr>
+                <td>
+                    <button onclick="saveImage(detect)">Detect objects</button>
+                    <button onclick="saveImage(inpaint)">Inpaint</button>
+                    <button onclick="copyResultToSource(event)">Save as source</button>
+                    <button onclick="showSource()">Undo changes</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <canvas id="canvas" onclick="wipePixels(event)"></canvas>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- <img src="{% get_media_prefix %}tmp/1187/init" style="width: 350px; height: 350px"> -->
+</body>
+</html>
