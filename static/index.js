@@ -101,6 +101,7 @@ function wipePixels(event) {
 	}
 
     ctx.putImageData(image, 0, 0)
+    maskCtx.putImageData(maskImage, 0, 0)
  }
 
 function copyResultToSource(event) {
