@@ -94,9 +94,9 @@ function wipePixels(event) {
 			data[i * 4 * W + j * 4 + 1] = 255
 			data[i * 4 * W + j * 4 + 2] = 255
 
-			maskImage.data[i * 4 * W] = 255
-			maskImage.data[i * 4 * W + 1] = 255
-			maskImage.data[i * 4 * W + 2] = 255
+			maskImage.data[i * 4 * W + j * 4] = 255
+			maskImage.data[i * 4 * W + j * 4 + 1] = 255
+			maskImage.data[i * 4 * W + j * 4 + 2] = 255
 		}
 	}
 
