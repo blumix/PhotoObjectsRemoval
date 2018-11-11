@@ -2,6 +2,7 @@
 // IS REQUIRED FOR CORRECT CSRF in AJAX
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
+     	"{% csrf_token %}"
          function getCookie(name) {
              var cookieValue = null;
              if (document.cookie && document.cookie != '') {
