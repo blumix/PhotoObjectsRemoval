@@ -2,6 +2,7 @@
 // IS REQUIRED FOR CORRECT CSRF in AJAX
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
+     	"{% csrf_token %}"
          function getCookie(name) {
              var cookieValue = null;
              if (document.cookie && document.cookie != '') {
@@ -129,7 +130,18 @@ function saveImage(hook) {
 
 function detect(fileDir) {
 	console.log(fileDir)
-	return
+
+	$.ajax({
+		type: "GET",
+		url: "/photo_corrector/detect/",
+		data: {
+			file: fileDir
+		}
+	}).fail(function(response) {
+		console.error("Failed to detect objects")
+	}).done(function(response) {
+		console.log(response)
+	})
 }
 
 function inpaint(fileDir) {
@@ -145,8 +157,6 @@ function inpaint(fileDir) {
 	}).done(function(response) {
 		loadImageFromPath(response)
 	})
-
-	return
 }
 
 function loadImageFromPath(path) {

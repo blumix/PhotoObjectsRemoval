@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^upload/$', views.upload, name='upload'),
     url(r'^inpaint/$', views.inpaint, name='inpaint'),
+    url(r'^detect/$', views.detectObjects, name='detect'),
 ]
 
 
