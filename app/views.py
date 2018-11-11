@@ -119,38 +119,38 @@ def detectObjects(request):
         form = PictureForm()
     return render(request, 'app/index.html', {'form': form, 'range': range(len(onlyfiles)), 'max': len (onlyfiles), 'img_path':path_to_folder})
 
-def send_info(request):
-    f = None
-    if request.method == 'POST':
+# def send_info(request):
+#     f = None
+#     if request.method == 'POST':
         
-        path_to_folder = request.POST.get('img_path', None)
+#         path_to_folder = request.POST.get('img_path', None)
 
-        masks = []
-        print ("Post:", request.POST)
-        for i in range(len(request.POST)):
-            try:
-                masks.append(int(list(request.POST)[i].split('_of_')[0]))
-            except ValueError:
-                continue
-        print("Choosen masks:", masks)
+#         masks = []
+#         print ("Post:", request.POST)
+#         for i in range(len(request.POST)):
+#             try:
+#                 masks.append(int(list(request.POST)[i].split('_of_')[0]))
+#             except ValueError:
+#                 continue
+#         print("Choosen masks:", masks)
         
-        abs_path_to_folder = os.path.join(settings.BASE_DIR, 'media/', path_to_folder)
+#         abs_path_to_folder = os.path.join(settings.BASE_DIR, 'media/', path_to_folder)
         
-        imagePath = abs_path_to_folder + 'init'
-        maskPath = abs_path_to_folder + 'mask_' + str (masks[0]) + '.jpg'
-        outPath = abs_path_to_folder + "out.png"
-        print ("Paths:", imagePath, maskPath, outPath)
+#         imagePath = abs_path_to_folder + 'init'
+#         maskPath = abs_path_to_folder + 'mask_' + str (masks[0]) + '.jpg'
+#         outPath = abs_path_to_folder + "out.png"
+#         print ("Paths:", imagePath, maskPath, outPath)
         
-        command = "python3.5 ~/generative_inpainting/test.py " + \
-        " --image " + imagePath + \
-        " --mask " + maskPath + \
-        " --output " + outPath + \
-        " --checkpoint_dir ~/generative_inpainting/model_logs/places2_256"        
+#         command = "python3.5 ~/generative_inpainting/test.py " + \
+#         " --image " + imagePath + \
+#         " --mask " + maskPath + \
+#         " --output " + outPath + \
+#         " --checkpoint_dir ~/generative_inpainting/model_logs/places2_256"        
         
-        print ("Gonna run:", command)
-        os.system(command)
+#         print ("Gonna run:", command)
+#         os.system(command)
         
-        return render(request, 'app/ready_img.html', {'path': path_to_folder})
+#         return render(request, 'app/ready_img.html', {'path': path_to_folder})
 
-    return render(request, 'app/ready_img.html', f)
+#     return render(request, 'app/ready_img.html', f)
 
