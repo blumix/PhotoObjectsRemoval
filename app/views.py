@@ -109,7 +109,7 @@ def detectObjects(request):
     print("Going to execute:", command)
     os.system (command)
     
-    maskPics = sorted(filter(lambda s: s.startsWith("mask_pic"), listdir(settings.BASE_DIR, settings.MEDIA_ROOT, os.path.join(path))))
+    maskPics = sorted(filter(lambda s: s.startsWith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
     maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, s)), maskPics)
 
     out = ";".join(maskPics)
