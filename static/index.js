@@ -3,25 +3,8 @@
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
      	"{% csrf_token %}"
-         function getCookie(name) {
-             var cookieValue = null;
-             if (document.cookie && document.cookie != '') {
-                 var cookies = document.cookie.split(';');
-                 for (var i = 0; i < cookies.length; i++) {
-                     var cookie = jQuery.trim(cookies[i]);
-                     // Does this cookie string begin with the name we want?
-                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                         break;
-                     }
-                 }
-             }
-             return cookieValue;
-         }
-         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-             // Only send the token to relative URLs i.e. locally.
-             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-         }
+         xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+         // console.log(Cookies.get('csrftoken'))
      } 
 });
 
@@ -129,33 +112,68 @@ function saveImage(hook) {
 }
 
 function detect(fileDir) {
-	console.log(fileDir)
+	$.get("/photo_corrector/detect/", {path: fileDir})
+		.fail(function(response) {
+			console.error("Failed to detect objects")
+			console.log(response)
+		}).done(function(response) {
+			var modal = $("#detectObjectsModal")
+			var modalBody = $("#modalBody")
+			var modalContent = $("#modalContent")
 
-	$.ajax({
-		type: "GET",
-		url: "/photo_corrector/detect/",
-		data: {
-			file: fileDir
-		}
-	}).fail(function(response) {
-		console.error("Failed to detect objects")
-	}).done(function(response) {
-		console.log(response)
-	})
+			modalBody.empty()
+			modalBody.append("<table>")
+
+			var arr = response.split(';')
+
+			if (arr.length != 0) {
+				modal.css("height", `${Math.min(800, 400 * arr.length / 3)}px`)
+			}
+
+			for (var i = 0; i < arr.length; i++) {
+				if (i % 3 == 0) {
+					if (i == 0) {
+						modalBody.append("<tr>")
+					} else {
+						modalBody.append("</tr><tr>")
+					}
+				}
+				var s = arr[i]
+				var imageId = "modalImage" + i
+				modalBody.append(`<td><img id="${imageId}" src="${s}" height=200 width=300></img></td>`)
+				$(`#${imageId}`).on('click', function() {
+					modalBody.empty()
+					modalBody.append("<p>Server is processing yout request. Please wait...")
+					inpaint(fileDir, i)
+				})
+			}
+
+			modalBody.append("</tr></table>")
+			modal.modal('toggle')
+		})
 }
 
-function inpaint(fileDir) {
+function inpaint(fileDir, maskIdx) {
+	var idx = -1
+	if (maskIdx) {
+		idx = maskIdx
+	}
+
 	$.ajax({
 		type: "POST",
 		url: "/photo_corrector/inpaint/",
 		data: {
 			dir: fileDir,
+			idx: maskIdx,
 			mask: mask.toDataURL()
 		}
 	}).fail(function(response) {
 		console.error("Failed to inpaint")
+		$("#modalBody").empty()
+		$("#modalBody").append("Server error. Please try with other with other image or mask.")
 	}).done(function(response) {
 		loadImageFromPath(response)
+		$("#detectObjectsModal").modal('hide')
 	})
 }
 
