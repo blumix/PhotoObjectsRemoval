@@ -157,6 +157,7 @@ function detect(fileDir) {
 					modalBody.empty()
 					modalBody.append("<p>Server is processing yout request. Please wait...")
 					inpaint(fileDir, event.target.id.split("_")[1])
+					modal.modal('toggle')
 				})
 			}
 
