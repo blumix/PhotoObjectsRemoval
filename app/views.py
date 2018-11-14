@@ -73,7 +73,7 @@ def inpaint(request):
     maskPath = ""
 
     if (maskIdx != None and maskIdx != "" and int(maskIdx) >= 0):
-        maskPath = os.path.join(full_path, 'mask_' + maskIdx)
+        maskPath = os.path.join(full_path, 'mask_' + maskIdx + ".jpg")
     else:
         maskPath = os.path.join(full_path, 'mask')
         data = b64decode(data)
@@ -114,7 +114,7 @@ def detectObjects(request):
     os.system (command)
     
     maskPics = sorted(filter(lambda s: s.startswith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
-    maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, s), maskPics))
+    maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, path ,s), maskPics))
 
     out = ";".join(maskPics)
 

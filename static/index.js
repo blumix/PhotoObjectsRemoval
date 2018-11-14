@@ -103,7 +103,7 @@ function saveImage(hook) {
 	$.ajax({
 		type: "POST",
 		url: "/photo_corrector/upload/",
-		data: source.toDataURL()
+		data: source.toDataURL("image/jpeg")
 	}).fail(function(response) {
 		console.error("Failed to upload ficture")
 	}).done(function(response) {
@@ -139,12 +139,13 @@ function detect(fileDir) {
 					}
 				}
 				var s = arr[i]
-				var imageId = "modalImage" + i
+				var imageId = "modalImage_" + i
+
 				modalBody.append(`<td><img id="${imageId}" src="${s}" height=200 width=300></img></td>`)
-				$(`#${imageId}`).on('click', function() {
+				$(`#${imageId}`).on('click', function(event) {
 					modalBody.empty()
 					modalBody.append("<p>Server is processing yout request. Please wait...")
-					inpaint(fileDir, i)
+					inpaint(fileDir, event.target.id.split("_")[1])
 				})
 			}
 
@@ -159,13 +160,16 @@ function inpaint(fileDir, maskIdx) {
 		idx = maskIdx
 	}
 
+	console.log("maskIdx")
+	console.log(maskIdx)
+
 	$.ajax({
 		type: "POST",
 		url: "/photo_corrector/inpaint/",
 		data: {
 			dir: fileDir,
 			idx: maskIdx,
-			mask: mask.toDataURL()
+			mask: mask.toDataURL("image/jpeg")
 		}
 	}).fail(function(response) {
 		console.error("Failed to inpaint")
