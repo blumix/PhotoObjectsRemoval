@@ -58,7 +58,11 @@ def inpaint(request):
     header, data = unquote(str(request.body)).split(",")
 
     path_to_folder = re.findall("dir=([\\w|/]+)", header)[0]
-    maskIdx = re.findall("idx=([-|\\d]+)", header)[0]
+    maskIdx = re.findall("idx=([-|\\d]+)", header)
+    if (len(maskIdx) == 0):
+        maskIdx = None
+    else:
+        maskIdx = maskIdx[0]
 
     print("path and mask", path_to_folder, maskIdx)
 
@@ -103,14 +107,14 @@ def detectObjects(request):
     if (path == None or path == ""):
         return HttpResponse(content="Path should not be empty", content_type="text/plain", status_code=400)
 
-    command = 'docker container run -it  -v ~/:/host a6033db4efbeb4181bd9f6a87e8bc70a1f9e03c72c03c00bbdc1a352ddd8d735 " + \
-        "python3 /host/PhotoObjectsRemoval/scripts/find_mask.py ' + \
+    command = 'docker container run -it  -v ~/:/host a6033db4efbeb4181bd9f6a87e8bc70a1f9e03c72c03c00bbdc1a352ddd8d735 ' + \
+        'python3 /host/PhotoObjectsRemoval/scripts/find_mask.py ' + \
         '/host/PhotoObjectsRemoval/media/' + path
     print("Going to execute:", command)
     os.system (command)
     
     maskPics = sorted(filter(lambda s: s.startswith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
-    maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, s)), maskPics)
+    maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, s), maskPics))
 
     out = ";".join(maskPics)
 
