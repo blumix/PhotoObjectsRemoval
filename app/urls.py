@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^upload/$', views.upload, name='upload'),
-    url(r'^send_info/$', views.send_info, name='send_info'),
+    url(r'^inpaint/$', views.inpaint, name='inpaint'),
+    url(r'^detect/$', views.detectObjects, name='detect'),
 ]
 
 

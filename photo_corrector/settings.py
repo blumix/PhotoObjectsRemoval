@@ -27,7 +27,7 @@ SECRET_KEY = '+f(rn8t1fikarx7t0-0g-fk+e!(1)m$0_2lkkrpn3kh$yv+4i^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "185.5.138.253", "localhost"]
 
 
 # Application definition
@@ -129,8 +129,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = 'static/'
-
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -142,9 +140,9 @@ MEDIA_ROOT = 'media/'
 
 MEDIA_URL = '/media/'
 
-# STATICFILES_DIRS = (
-#     STATIC_ROOT,
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
 
 # MEDIA_ROOT = "/Users/an.novikova/Desktop/Technosphere/Project_4sem/project/photo_corrector/app/media/"
 
@@ -152,3 +150,13 @@ MEDIA_URL = '/media/'
 
 # BASE_DIR /Users/an.novikova/Desktop/Technosphere/Project_4sem/project/photo_corrector
 
+
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 52428800
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
