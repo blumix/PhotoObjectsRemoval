@@ -112,8 +112,19 @@ function saveImage(hook) {
 }
 
 function detect(fileDir) {
+	var modal = $("#detectObjectsModal")
+	var modalBody = $("#modalBody")
+
+	modalBody.empty()
+	modalBody.append("<p>Detecting objects. Please wait...")
+	modal.modal('toggle')
+
 	$.get("/photo_corrector/detect/", {path: fileDir})
 		.fail(function(response) {
+			var modalBody = $("#modalBody")
+			modalBody.empty()
+			modalBody.append("<p>Error occured while detecting objects")
+
 			console.error("Failed to detect objects")
 			console.log(response)
 		}).done(function(response) {
@@ -127,7 +138,7 @@ function detect(fileDir) {
 			var arr = response.split(';')
 
 			if (arr.length != 0) {
-				modal.css("height", `${Math.min(800, 400 * arr.length / 3)}px`)
+				modal.css("height", `${Math.min(800, 400 * Math.max(1, arr.length / 3))}px`)
 			}
 
 			for (var i = 0; i < arr.length; i++) {
@@ -150,11 +161,17 @@ function detect(fileDir) {
 			}
 
 			modalBody.append("</tr></table>")
-			modal.modal('toggle')
 		})
 }
 
 function inpaint(fileDir, maskIdx) {
+	var modal = $("#detectObjectsModal")
+	var modalBody = $("#modalBody")
+
+	modalBody.empty()
+	modalBody.append("<p>Inpainting. Please wait...")
+	modal.modal('toggle')
+
 	var idx = -1
 	if (maskIdx) {
 		idx = maskIdx
