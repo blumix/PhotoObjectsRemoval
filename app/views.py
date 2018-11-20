@@ -20,7 +20,8 @@ from .models import Photo
 from os import listdir
 from os.path import isfile, join
 
-
+import numpy as np
+import skimage.io
 
 def index(request):
     print("upload def called")
@@ -58,11 +59,13 @@ def inpaint(request):
     header, data = unquote(str(request.body)).split(",")
 
     path_to_folder = re.findall("dir=([\\w|/]+)", header)[0]
-    maskIdx = re.findall("idx=([-|\\d]+)", header)
+    maskIdx = re.findall("idx=([-|\\d:]+)", header)
+    maskIdxs = []
     if (len(maskIdx) == 0):
         maskIdx = None
     else:
         maskIdx = maskIdx[0]
+        maskIdxs = maskIdx.split("_")
 
     print("path and mask", path_to_folder, maskIdx)
 
@@ -72,8 +75,9 @@ def inpaint(request):
     outPath = os.path.join(full_path, 'out.png')
     maskPath = ""
 
-    if (maskIdx != None and maskIdx != "" and int(maskIdx) >= 0):
-        maskPath = os.path.join(full_path, 'mask_' + maskIdx + ".jpg")
+    compositeMaskPath = prepareCompositeMask(full_path, maskIdxs)
+    if (maskIdx != None and maskIdx != ""):
+        maskPath = compositeMaskPath
     else:
         maskPath = os.path.join(full_path, 'mask')
         data = b64decode(data)
@@ -113,9 +117,27 @@ def detectObjects(request):
     print("Going to execute:", command)
     os.system (command)
     
-    maskPics = sorted(filter(lambda s: s.startswith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
+    maskPics = sorted(filter(lambda s: s.startswith(""), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
     maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, path ,s), maskPics))
 
     out = ";".join(maskPics)
 
     return HttpResponse(content=out, content_type="text/plain")
+
+
+def prepareCompositeMask(path_to_folder, maskIdxs):
+    if len(maskIdxs) == 0:
+        return path_to_folder
+
+    resultPath = os.path.join(path_to_folder, "mask_", ''.join(maskIdxs))
+
+    if len(maskIdxs) == 1:
+        return resultPath
+
+    result = image.io.imread(os.path.join(path_to_folder, "mask_", maskIdxs[0], ".jpg"))
+    for idx in maskIdxs[1:]:
+        result += image.io.imread(os.path.join(path_to_folder, "mask_", idx, ".jpg"))
+
+    cv2.imwrite(resultPath, result)
+
+    return resultPath
