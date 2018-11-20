@@ -22,6 +22,7 @@ from os.path import isfile, join
 
 import numpy as np
 import skimage.io
+import cv2
 
 def index(request):
     print("upload def called")
@@ -65,7 +66,7 @@ def inpaint(request):
         maskIdx = None
     else:
         maskIdx = maskIdx[0]
-        maskIdxs = maskIdx.split("_")
+        maskIdxs = maskIdx.split(":")
 
     print("path and mask", path_to_folder, maskIdx)
 
@@ -117,7 +118,7 @@ def detectObjects(request):
     print("Going to execute:", command)
     os.system (command)
     
-    maskPics = sorted(filter(lambda s: s.startswith(""), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
+    maskPics = sorted(filter(lambda s: s.startswith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
     maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, path ,s), maskPics))
 
     out = ";".join(maskPics)
@@ -129,14 +130,18 @@ def prepareCompositeMask(path_to_folder, maskIdxs):
     if len(maskIdxs) == 0:
         return path_to_folder
 
-    resultPath = os.path.join(path_to_folder, "mask_", ''.join(maskIdxs))
+    resultPath = os.path.join(path_to_folder, "mask_" + ''.join(maskIdxs) + ".jpg")
+
+    print("Composite path = " + resultPath)
 
     if len(maskIdxs) == 1:
         return resultPath
 
-    result = image.io.imread(os.path.join(path_to_folder, "mask_", maskIdxs[0], ".jpg"))
+    result = skimage.io.imread(os.path.join(path_to_folder, "mask_" + maskIdxs[0] + ".jpg"))
     for idx in maskIdxs[1:]:
-        result += image.io.imread(os.path.join(path_to_folder, "mask_", idx, ".jpg"))
+        if idx == "":
+            continue
+        result += skimage.io.imread(os.path.join(path_to_folder, "mask_" + idx + ".jpg"))
 
     cv2.imwrite(resultPath, result)
 
