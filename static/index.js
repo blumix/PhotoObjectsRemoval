@@ -193,7 +193,6 @@ function detect(fileDir) {
 				})
 
 				inpaint(fileDir, indexes)
-				modal.modal('toggle')
 			})
 		})
 }
