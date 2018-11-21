@@ -109,6 +109,13 @@ function saveImage(hook) {
 	}).done(function(response) {
 		hook(response)
 	})
+
+	var modal = $("#detectObjectsModal")
+	var modalBody = $("#modalBody")
+
+	modalBody.empty()
+	modalBody.append("<p>Sending image...")
+	modal.modal('toggle')
 }
 
 function detect(fileDir) {
@@ -117,7 +124,6 @@ function detect(fileDir) {
 
 	modalBody.empty()
 	modalBody.append("<p>Detecting objects. Please wait...")
-	modal.modal('toggle')
 
 	$.get("/photo_corrector/detect/", {path: fileDir})
 		.fail(function(response) {
@@ -198,7 +204,6 @@ function inpaint(fileDir, maskIdx) {
 
 	modalBody.empty()
 	modalBody.append("<p>Inpainting. Please wait...")
-	modal.modal('toggle')
 
 	var idx = -1
 	if (maskIdx) {

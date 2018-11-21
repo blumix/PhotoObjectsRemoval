@@ -27,10 +27,7 @@ import cv2
 SYNC_FLODER_NAME="/home/dimjava/PROJECT/tmp/sync_mask/"
 
 def index(request):
-    print("upload def called")
-    form = PictureForm()
-    return render(request, 'app/index.html', {'form': form})
-    # return HttpResponse("Hello!")
+    return render(request, 'app/index.html')
 
 def upload(request):
     print("Upload called")
@@ -48,7 +45,7 @@ def upload(request):
         with open(os.path.join(full_path, 'init'), 'wb') as fout:
             fout.write(data)
     else:
-        print(form.errors)
+        return HttpResponse(content="Other than POST not supported", content_type="text/plain", status_code=400)
 
     return HttpResponse(path_to_folder, content_type="text/plain")
 
