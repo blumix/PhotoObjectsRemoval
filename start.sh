@@ -1,1 +1,1 @@
-python3 manage.py runserver localhost:8500
+python3.5 manage.py runserver 0:8500
