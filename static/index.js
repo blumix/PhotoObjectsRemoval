@@ -112,8 +112,19 @@ function saveImage(hook) {
 }
 
 function detect(fileDir) {
+	var modal = $("#detectObjectsModal")
+	var modalBody = $("#modalBody")
+
+	modalBody.empty()
+	modalBody.append("<p>Detecting objects. Please wait...")
+	modal.modal('toggle')
+
 	$.get("/photo_corrector/detect/", {path: fileDir})
 		.fail(function(response) {
+			var modalBody = $("#modalBody")
+			modalBody.empty()
+			modalBody.append("<p>Error occured while detecting objects")
+
 			console.error("Failed to detect objects")
 			console.log(response)
 		}).done(function(response) {
@@ -127,34 +138,68 @@ function detect(fileDir) {
 			var arr = response.split(';')
 
 			if (arr.length != 0) {
-				modal.css("height", `${Math.min(800, 400 * arr.length / 3)}px`)
+				modal.css("height", `${Math.min(800, 400 * Math.max(1, arr.length / 3))}px`)
 			}
+
+			var toAppend = ``
 
 			for (var i = 0; i < arr.length; i++) {
 				if (i % 3 == 0) {
 					if (i == 0) {
-						modalBody.append("<tr>")
+						toAppend += "<tr>"
 					} else {
-						modalBody.append("</tr><tr>")
+						toAppend += "</tr><tr>"
 					}
 				}
 				var s = arr[i]
 				var imageId = "modalImage_" + i
 
-				modalBody.append(`<td><img id="${imageId}" src="${s}" height=200 width=300></img></td>`)
-				$(`#${imageId}`).on('click', function(event) {
-					modalBody.empty()
-					modalBody.append("<p>Server is processing yout request. Please wait...")
-					inpaint(fileDir, event.target.id.split("_")[1])
+				toAppend += "<td>"
+				toAppend += `<img id="${imageId}" src="${s}" height=200 width=300></img>`
+				toAppend += `<input type="checkbox" class="form-check-input" id="checkbox_${i}"/>`
+				toAppend += `</td>`
+			}
+
+			toAppend += "</tr></table>"
+			modalBody.append(toAppend)
+
+			for (var i = 0; i < arr.length; i++) {
+				$(`#modalImage_${i}`).on('click', function(event) {
+					var checkobxIdx = "checkbox_" + event.target.id.split("_")[1]
+					var checkbox = $(`#${checkobxIdx}`)
+					checkbox.prop("checked", !checkbox.prop("checked"))
 				})
 			}
 
-			modalBody.append("</tr></table>")
-			modal.modal('toggle')
+			$("#applyButton").on('click', function(event) {
+				var checkboxes = document.querySelectorAll("input[id^='checkbox_']")
+
+				modalBody.empty()
+				modalBody.append("<p>Server is processing yout request. Please wait...")
+
+				console.log(checkboxes)
+
+				var indexes = ""
+				checkboxes.forEach(checkbox => {
+					if (checkbox.checked) {
+						indexes = indexes + checkbox.id.split('_')[1] + ":"
+					}
+				})
+
+				inpaint(fileDir, indexes)
+				modal.modal('toggle')
+			})
 		})
 }
 
 function inpaint(fileDir, maskIdx) {
+	var modal = $("#detectObjectsModal")
+	var modalBody = $("#modalBody")
+
+	modalBody.empty()
+	modalBody.append("<p>Inpainting. Please wait...")
+	modal.modal('toggle')
+
 	var idx = -1
 	if (maskIdx) {
 		idx = maskIdx

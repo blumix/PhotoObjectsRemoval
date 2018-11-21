@@ -21,6 +21,9 @@ from os import listdir
 from os.path import isfile, join
 from time import sleep
 
+import numpy as np
+import skimage.io
+import cv2
 SYNC_FLODER_NAME="/home/dimjava/PROJECT/tmp/sync_mask/"
 
 def index(request):
@@ -59,11 +62,13 @@ def inpaint(request):
     header, data = unquote(str(request.body)).split(",")
 
     path_to_folder = re.findall("dir=([\\w|/]+)", header)[0]
-    maskIdx = re.findall("idx=([-|\\d]+)", header)
+    maskIdx = re.findall("idx=([-|\\d:]+)", header)
+    maskIdxs = []
     if (len(maskIdx) == 0):
         maskIdx = None
     else:
         maskIdx = maskIdx[0]
+        maskIdxs = maskIdx.split(":")
 
     print("path and mask", path_to_folder, maskIdx)
 
@@ -73,8 +78,9 @@ def inpaint(request):
     outPath = os.path.join(full_path, 'out.png')
     maskPath = ""
 
-    if (maskIdx != None and maskIdx != "" and int(maskIdx) >= 0):
-        maskPath = os.path.join(full_path, 'mask_' + maskIdx + ".jpg")
+    compositeMaskPath = prepareCompositeMask(full_path, maskIdxs)
+    if (maskIdx != None and maskIdx != ""):
+        maskPath = compositeMaskPath
     else:
         maskPath = os.path.join(full_path, 'mask')
         data = b64decode(data)
@@ -133,3 +139,25 @@ def detectObjects(request):
     out = ";".join(maskPics)
 
     return HttpResponse(content=out, content_type="text/plain")
+
+
+def prepareCompositeMask(path_to_folder, maskIdxs):
+    if len(maskIdxs) == 0:
+        return path_to_folder
+
+    resultPath = os.path.join(path_to_folder, "mask_" + ''.join(maskIdxs) + ".jpg")
+
+    print("Composite path = " + resultPath)
+
+    if len(maskIdxs) == 1:
+        return resultPath
+
+    result = skimage.io.imread(os.path.join(path_to_folder, "mask_" + maskIdxs[0] + ".jpg"))
+    for idx in maskIdxs[1:]:
+        if idx == "":
+            continue
+        result += skimage.io.imread(os.path.join(path_to_folder, "mask_" + idx + ".jpg"))
+
+    cv2.imwrite(resultPath, result)
+
+    return resultPath
