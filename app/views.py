@@ -19,10 +19,12 @@ from .models import Photo
 
 from os import listdir
 from os.path import isfile, join
+from time import sleep
 
 import numpy as np
 import skimage.io
 import cv2
+SYNC_FLODER_NAME="/home/dimjava/PROJECT/tmp/sync_mask/"
 
 def index(request):
     print("upload def called")
@@ -112,11 +114,24 @@ def detectObjects(request):
     if (path == None or path == ""):
         return HttpResponse(content="Path should not be empty", content_type="text/plain", status_code=400)
 
-    command = 'docker container run -it  -v ~/:/host a6033db4efbeb4181bd9f6a87e8bc70a1f9e03c72c03c00bbdc1a352ddd8d735 ' + \
-        'python3 /host/PhotoObjectsRemoval/scripts/find_mask.py ' + \
-        '/host/PhotoObjectsRemoval/media/' + path
-    print("Going to execute:", command)
-    os.system (command)
+    img_hash = path[4:-1]
+    open(SYNC_FLODER_NAME + "go_" + img_hash, 'a').close()
+    print("Created job {}.".format (SYNC_FLODER_NAME + "go_" + img_hash))
+    done_name = "done_" + img_hash    
+    print("Waiting for {}.".format (done_name))
+    done = False
+    for i in range (100):
+        done_jobs = [f for f in listdir(SYNC_FLODER_NAME) if f.startswith ("done_")]
+        if done_name not in done_jobs:
+            sleep (0.1)
+            continue
+        os.remove (SYNC_FLODER_NAME + done_name)
+        done = True
+        break
+            
+    if not done:
+        print ("Timeout.")
+        return HttpResponse(content="Timeout in objects detection.", content_type="text/plain", status_code=400)
     
     maskPics = sorted(filter(lambda s: s.startswith("mask_pic"), listdir(os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, path))))
     maskPics = list(map(lambda s: os.path.join("/", settings.MEDIA_ROOT, path ,s), maskPics))
