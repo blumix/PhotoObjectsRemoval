@@ -56,7 +56,7 @@ def find_masks (pic_folder, model):
         mask = r['masks'][:,:,i]
         maskImage = np.zeros(image.shape)
         maskImage[mask==True] = [255, 255, 255]
-        kernel = np.ones((5,5), np.uint8)
+        kernel = np.ones((10,10), np.uint8)
         maskImage = cv2.dilate (maskImage, kernel, 1)
         
         cv2.imwrite (pic_folder + "mask_" + str (i) + ".jpg", maskImage)
@@ -67,28 +67,27 @@ def find_masks (pic_folder, model):
 
     
 def main ():
+    config = InferenceConfig()
+    config.display()
+
+    model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
+    model.load_weights(COCO_MODEL_PATH, by_name=True)
+
     while (True):
         try:
-            config = InferenceConfig()
-            config.display()
+            new_jobs = [f for f in listdir(SYNC_FLODER_NAME) if f.startswith ("go_")]
+            if len (new_jobs) == 0:
+                sleep (0.1)
+                continue
 
-            model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
-            model.load_weights(COCO_MODEL_PATH, by_name=True)
-
-            while (True):
-                new_jobs = [f for f in listdir(SYNC_FLODER_NAME) if f.startswith ("go_")]
-                if len (new_jobs) == 0:
-                    sleep (0.1)
-                    continue
-
-                job_id = new_jobs[0][3:]
-                os.remove (SYNC_FLODER_NAME + new_jobs[0])
-                print ("Processing image: ", job_id)
-                pic_folder = FILES_FLODER_NAME + job_id + "/"
-                result = find_masks (pic_folder, model)
-                print ("Masks found:", result)
-                open(SYNC_FLODER_NAME + "done_" + job_id, 'a').close()
-                print ("Job {} done.".format (job_id))
+            job_id = new_jobs[0][3:]
+            os.remove (SYNC_FLODER_NAME + new_jobs[0])
+            print ("Processing image: ", job_id)
+            pic_folder = FILES_FLODER_NAME + job_id + "/"
+            result = find_masks (pic_folder, model)
+            print ("Masks found:", result)
+            open(SYNC_FLODER_NAME + "done_" + job_id, 'a').close()
+            print ("Job {} done.".format (job_id))
                 
         except KeyboardInterrupt:
             sys.exit()            

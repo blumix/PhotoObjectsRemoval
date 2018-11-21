@@ -25,6 +25,7 @@ import numpy as np
 import skimage.io
 import cv2
 SYNC_FLODER_NAME="/home/dimjava/PROJECT/tmp/sync_mask/"
+SYNC_FLODER_NAME_INPAINT="/home/dimjava/PROJECT/tmp/sync_inpaint/"
 
 def index(request):
     return render(request, 'app/index.html')
@@ -85,19 +86,31 @@ def inpaint(request):
         with open(os.path.join(full_path, 'mask'), 'wb') as fout:
             fout.write(data)
 
-    result = _inpaint(path_to_folder, imagePath, maskPath, outPath)
+    result = _inpaint(path_to_folder, maskPath)
 
     return HttpResponse(content=result, content_type="text/plain")
 
-def _inpaint(path_to_folder, imagePath, maskPath, outPath):
-    command = "python3.5 ~/generative_inpainting/test.py " + \
-        " --image " + imagePath + \
-        " --mask " + maskPath + \
-        " --output " + outPath + \
-        " --checkpoint_dir ~/generative_inpainting/model_logs/places2_256"        
-        
-    print("Gonna run:", command)
-    os.system(command)
+def _inpaint(path_to_folder, maskPath):
+    img_hash = path_to_folder.strip ().split ("/")[-2]
+    go_f = open(SYNC_FLODER_NAME_INPAINT + "go_" + img_hash, 'w')
+    go_f.write (maskPath)
+    go_f.close ()
+    print("Created job {}.".format (SYNC_FLODER_NAME_INPAINT + "go_" + img_hash))
+    done_name = "done_" + img_hash
+    print("Waiting for {}.".format (done_name))
+    done = False
+    for i in range (100):
+        done_jobs = [f for f in listdir(SYNC_FLODER_NAME_INPAINT) if f.startswith ("done_")]
+        if done_name not in done_jobs:
+            sleep (0.1)
+            continue
+        os.remove (SYNC_FLODER_NAME_INPAINT + done_name)
+        done = True
+        break
+            
+    if not done:
+        print ("Timeout.")
+        return HttpResponse(content="Timeout in objects detection.", content_type="text/plain", status_code=400)
 
     return os.path.join("/", settings.MEDIA_ROOT, path_to_folder, 'out.png')
 
