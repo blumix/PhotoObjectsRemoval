@@ -10,6 +10,7 @@ $.ajaxSetup({
 
 
 function initImage(input) {
+        $('.button').show();
 	if (!(input.files && input.files[0])) {
 		return
 	}
@@ -23,8 +24,8 @@ function initImage(input) {
 
 
 		img.onload = function() {
-			W = img.width
-        	H = img.height
+			W = img.width 
+        	H = img.height 
 
         	canvas.width = W
         	source.width = W
