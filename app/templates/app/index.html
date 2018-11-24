@@ -30,18 +30,20 @@
 </head>
 <body>
 <div>
-    <h1 style="color: darkgoldenrod">Upload Picture</h1>
-    <input type="file" id="sourceImage" onchange="initImage(this)">
+    <h1 style="color: darkslategrey; margin-left: 500px; margin-top: 70px; margin-bottom: 30px;">Upload Picture</h1>
+    <div style="margin-left: 500px; color: darkblue;"><input type="file" id="sourceImage" onchange="initImage(this)"></div>
     <br>
-    <div id="mainBlock" style="display: none">
+    <div id="mainBlock" style="">
         <table>
             <tr>
+                
                 <td>
-                    <button onclick="saveImage(detect)">Detect objects</button>
-                    <button onclick="saveImage(inpaint)">Inpaint</button>
-                    <button onclick="copyResultToSource(event)">Save as source</button>
-                    <button onclick="showSource()">Undo changes</button>
+                    <button class="button" style="display: none; margin-left: 400px; color: dodgerblue;" onclick="saveImage(detect)">Detect objects</button>
+                    <button class="button" style="display: none; color: dodgerblue;" onclick="saveImage(inpaint)">Inpaint</button>
+                    <button class="button" style="display: none; color: dodgerblue;" onclick="copyResultToSource(event)">Save as source</button>
+                    <button class="button" style="display:none; color: dodgerblue;" onclick="showSource()">Undo changes</button>
                 </td>
+               
             </tr>
             <tr>
                 <td>
