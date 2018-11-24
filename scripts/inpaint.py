@@ -23,7 +23,7 @@ import os
 from inpaint_model import InpaintCAModel
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--checkpoint_dir', default='', type=str,
+parser.add_argument('--checkpoint_dir', default='/home/dimjava/generative_inpainting/model_logs/places2_256/', type=str,
                     help='The directory of tensorflow checkpoint.')
 
 
