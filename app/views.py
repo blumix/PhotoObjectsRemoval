@@ -25,7 +25,7 @@ from os.path import isfile, join
 def index(request):
     print("upload def called")
     form = PictureForm()
-    return render(request, 'app/index.html', {'form': form})
+    return render(request, 'app/test.html', {'form': form})
     # return HttpResponse("Hello!")
 
 def upload(request):

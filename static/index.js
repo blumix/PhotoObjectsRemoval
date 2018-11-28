@@ -24,8 +24,8 @@ function initImage(input) {
 
 
 		img.onload = function() {
-			W = img.width / 2.0
-        	H = img.height / 2.0
+			W = img.width 
+        	H = img.height 
 
         	canvas.width = W
         	source.width = W
@@ -34,9 +34,9 @@ function initImage(input) {
         	source.height = H
         	mask.height = H
 
-        	ctx.drawImage(img, 300, 100, W+300, H)
+        	ctx.drawImage(img, 0, 0, W, H)
 
-        	var imageData = ctx.getImageData(3000, 0, W+300, H)
+        	var imageData = ctx.getImageData(0, 0, W, H)
         	sourceCtx.putImageData(imageData, 0, 0)
         	maskCtx.putImageData(imageData, 0, 0)
 

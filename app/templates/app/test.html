@@ -1,12 +1,42 @@
 <!DOCTYPE html>
+{% load static %}
+{% load bootstrap3 %}
 <html lang="en">
 <head>
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    
+  <link rel="stylesheet" type="text/css" href="{% static index.css %}">
+    
+  {% csrf_token %}
+    <script type="text/javascript">
+        var H = 480;
+        var W = 600;
+
+        // eraser radius
+        var r = 10;
+
+        var mask = document.createElement('canvas')
+        var maskCtx = mask.getContext('2d')
+        var source = document.createElement('canvas')
+        var sourceCtx = source.getContext('2d') 
+    </script>
+    <script language="JavaScript" src="{% static 'index.js' %}"></script>
+    
+  
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -55,13 +85,13 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Photos</a></li>
-        <li><a href="#">Contact</a></li>
+        <li class="active"><a href="#">About PhotoFix</a></li>
+        <li><a href="#">Demo</a></li>
+        <li><a href="#">Examples</a></li>
+        <li><a href="#">Contact us</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+<!--         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
       </ul>
     </div>
   </div>
@@ -75,24 +105,64 @@
       <p><a href="#">Link3</a></p>
     </div>
     <div class="col-sm-8 text-left"> 
-      <h1>Welcome</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <h1 style="color :dodgerblue">Welcome to PhotoFix</h1>
+      <p>Create photos of you dream using our application. Some text. Some text. Some text. Some text. Some text. Some text.
+        Some text. Some text. Some text. Some text. Some text.</p>
       <hr>
-      <h3>Test</h3>
-      <p>Lorem ipsum...</p>
+<!--       <h3>Test</h3>
+      <p>Lorem ipsum...</p> -->
+    <div>
+    <h1 style="color: darkslategrey; margin-top: 20px; margin-bottom: 30px;">Upload Picture</h1>
+    <div style=" color: darkblue;"><input type="file" id="sourceImage" onchange="initImage(this)"></div>
+    <br>
+    <div id="mainBlock" style="">
+        <table>
+            <tr>
+                
+                <td>
+                    <button class="button" style="display: none; color: dodgerblue;" onclick="saveImage(detect)">Detect objects</button>
+                    <button class="button" style="display: none; color: dodgerblue;" onclick="saveImage(inpaint)">Inpaint</button>
+                    <button class="button" style="display: none; color: dodgerblue;" onclick="copyResultToSource(event)">Save as source</button>
+                    <button class="button" style="display:none; color: dodgerblue;" onclick="showSource()">Undo changes</button>
+                </td>
+               
+            </tr>
+            <tr>
+                <td>
+                    <canvas id="canvas" onclick="wipePixels(event)"></canvas>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
+        
+    <div id="detectObjectsModal" class="modal" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 950px;">
+        <div class="modal-dialog" style="max-width: 950px; margin: 0;">
+            <div id="modalContent" class="modal-content" style="width: 950px;">
+                <div id="modalBody" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Erase selected</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        
     </div>
     <div class="col-sm-2 sidenav">
-<!--       <div class="well">
-        <p>ADS</p>
+      <div class="well">
+        <p>Picture before</p>
       </div>
       <div class="well">
-        <p>ADS</p>
-      </div> -->
+        <p>Picture After</p>
+      </div>
     </div>
   </div>
 </div>
 <footer class="container-fluid text-center">
-  <p>Footer Text</p>
+  <p>By Technosphere</p>
 </footer>
 
 </body>
