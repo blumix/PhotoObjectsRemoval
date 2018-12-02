@@ -27,7 +27,7 @@ SECRET_KEY = '+f(rn8t1fikarx7t0-0g-fk+e!(1)m$0_2lkkrpn3kh$yv+4i^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["104.214.52.178", "127.0.0.1", "185.5.138.253", "localhost"]
+ALLOWED_HOSTS = ["104.214.52.178", "127.0.0.1", "185.5.138.253", "localhost", "blumix.me"]
 
 
 # Application definition
