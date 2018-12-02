@@ -28,7 +28,7 @@ SYNC_FLODER_NAME="/home/dimjava/PROJECT/tmp/sync_mask/"
 SYNC_FLODER_NAME_INPAINT="/home/dimjava/PROJECT/tmp/sync_inpaint/"
 
 def index(request):
-    return render(request, 'app/index.html')
+    return render(request, 'index.html')
 
 def upload(request):
     print("Upload called")

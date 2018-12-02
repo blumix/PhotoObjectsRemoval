@@ -1,28 +1,32 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>NeuroMag</title>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/animate.min.css" rel="stylesheet"> 
-  <link href="css/font-awesome.min.css" rel="stylesheet">
-  <link href="css/lightbox.css" rel="stylesheet">
-  <link href="css/main.css" rel="stylesheet">
-  <link id="css-preset" href="css/presets/preset1.css" rel="stylesheet">
-  <link href="css/responsive.css" rel="stylesheet">
-  <link href="fonts/fontcustom/fontcustom.css" rel="stylesheet">
+  <title>PhotoFix</title>
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/animate.min.css' %}" rel="stylesheet"> 
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/lightbox.css' %}" rel="stylesheet">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link id="css-preset" href="{% static 'css/presets/preset1.css' %}" rel="stylesheet">
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontcustom/fontcustom.css' %}" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
   <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
+    <script src="{% static 'js/html5shiv.js' %}"></script>
+    <script src="{% static 'js/respond.min.js' %}"></script>
   <![endif]-->
   
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
-  <link rel="shortcut icon" href="images/favicon.ico">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
+  {% csrf_token %}
   <script type="text/javascript">
     var H = 640;
     var W = 480;
@@ -36,16 +40,16 @@
     var sourceCtx = source.getContext('2d') 
   </script>
 
-  <script type="text/javascript" src="js/jquery.js"></script>
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/jquery.inview.min.js"></script>
-  <script type="text/javascript" src="js/wow.min.js"></script>
-  <script type="text/javascript" src="js/mousescroll.js"></script>
-  <script type="text/javascript" src="js/smoothscroll.js"></script>
-  <script type="text/javascript" src="js/jquery.countTo.js"></script>
-  <script type="text/javascript" src="js/lightbox.min.js"></script>
-  <script type="text/javascript" src="js/main.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.inview.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/wow.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/mousescroll.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/smoothscroll.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.countTo.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/lightbox.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 
 </head><!--/head-->
 
@@ -58,16 +62,16 @@
   <header id="home">
     <div id="home-slider" class="carousel slide carousel-fade" data-ride="carousel">
       <div class="carousel-inner">
-        <div class="item active" style="background-image: url(images/slider/1.jpg)">
+        <div class="item active" style="background-image: url({% static 'images/slider/1.jpg)' %}">
           <div class="caption">
-            <h1 class="animated fadeInLeftBig">Welcome to <span>NeuroMag</span></h1>
+            <h1 class="animated fadeInLeftBig">Welcome to <span>PhotoFix</span></h1>
             <p class="animated fadeInRightBig">Smart images editing tool</p>
             <a data-scroll class="btn btn-start animated fadeInUpBig" href="#demo">Start now</a>
           </div>
         </div>
-        <div class="item" style="background-image: url(images/slider/2.jpg)">
+        <div class="item" style="background-image: url({% static 'images/slider/2.jpg)' %}">
           <div class="caption">
-            <h1 class="animated fadeInLeftBig">Say Hello to <span>NeuroMag</span></h1>
+            <h1 class="animated fadeInLeftBig">Say Hello to <span>PhotoFix</span></h1>
             <p class="animated fadeInRightBig">Tap button to start</p>
             <a data-scroll class="btn btn-start animated fadeInUpBig" href="#demo">Start now</a>
           </div>
@@ -89,15 +93,15 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="index.html">
-            <h1><img class="img-responsive" src="images/logo.png" alt="logo"></h1>
+            <h1><img class="img-responsive" src="{% static 'images/photofix-logo.png' %}" alt="logo"></h1>
           </a>                    
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">                 
             <li class="scroll active"><a href="#home">Home</a></li>
+            <li class="scroll"><a href="#demo">Demo</a></li>
             <li class="scroll"><a href="#services">Technologies</a></li>
             <li class="scroll"><a href="#team">Team</a></li>
-            <li class="scroll"><a href="#demo">Demo</a></li>
             <li class="scroll"><a href="#contact">Contact</a></li>       
           </ul>
         </div>
@@ -126,22 +130,22 @@
           </div>
           <div class="col-sm-2-my nopad">
             <li>
-              <button id="detectButton" disabled=""><a>Detect</a></button>
+              <button id="detectButton" onclick="saveImage(detect)" disabled><a>Detect</a></button>
             </li>
           </div>
           <div class="col-sm-2-my nopad">
             <li>
-              <button id="inpaintButton" disabled><a>Inpaint</a></button>
+              <button id="inpaintButton" onclick="saveImage(inpaint)" disabled><a>Inpaint</a></button>
             </li>
           </div>
           <div class="col-sm-2-my nopad">
             <li class="button">
-              <button id="saveButton" disabled><a href="#demo">Save</a></button>
+              <button id="saveButton" onclick="copyResultToSource(event)" disabled><a href="#demo">Save</a></button>
             </li>
           </div>
           <div class="col-sm-2-my nopad">
             <li>
-              <button id="undoButton" disabled class="button"><a>Undo</a></button>
+              <button id="undoButton" onclick="showSource()" class="button" disabled><a>Undo</a></button>
             </li>
           </div>
         </ul>
@@ -149,9 +153,21 @@
       <div class="row">
         <div id="imageContainer" class="col-sm-8 col-sm-offset-2 nopad wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="300ms">
           <canvas id="canvas" class="mainImage" onclick="wipePixels(event)"></canvas>
-          <img id="mainImage" class="mainImage" src="images/default.jpg" hidden="true" onload="loadDefaultImage()">
+          <img id="mainImage" class="mainImage" src="{% static 'images/default.jpg' %}" hidden="true" onload="loadDefaultImage()">
         </div>
       </div>
+      <div id="detectObjectsModal" class="modal" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 950px;">
+        <div class="modal-dialog" style="max-width: 950px; margin: 0;">
+            <div id="modalContent" class="modal-content" style="width: 950px;">
+                <div id="modalBody" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button id="applyButton" type="button" class="btn btn-default">Apply</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
   </section>
 
@@ -196,7 +212,7 @@
           </div>
           <div class="col-sm-4 wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="650ms">
             <div class="service-icon">
-              <i><img src="fonts/tensorflow.png"/></i>
+              <i><img src="{% static 'fonts/tensorflow.png' %}"/></i>
             </div>
             <div class="service-info">
               <h3>Tensorflow</h3>
@@ -205,7 +221,7 @@
           </div>
           <div class="col-sm-4 wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="750ms">
             <div class="service-icon">
-              <i><img src="fonts/python.png"></img></i>
+              <i><img src="{% static 'fonts/python.png' %}"></img></i>
             </div>
             <div class="service-info">
               <h3>Django</h3>
@@ -214,7 +230,7 @@
           </div>
           <div class="col-sm-4 wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="850ms">
             <div class="service-icon">
-              <i><img src="fonts/jguery.png"></img></i>
+              <i><img src="{% static 'fonts/jguery.png' %}"></img></i>
             </div>
             <div class="service-info">
               <h3>JQuery</h3>
@@ -239,7 +255,7 @@
           <div class="col-md-4">
             <div class="team-member wow flipInY" data-wow-duration="1000ms" data-wow-delay="300ms">
               <div class="member-image">
-                <img class="img-responsive" src="images/team/1.jpg" alt="" style="height:311px; width:100%">
+                <img class="img-responsive" src="{% static 'images/team/1.jpg' %}" alt="" style="height:311px; width:100%">
               </div>
               <div class="member-info">
                 <h3>Mikhail Belozerov</h3>
@@ -260,7 +276,7 @@
           <div class="col-md-4">
             <div class="team-member wow flipInY" data-wow-duration="1000ms" data-wow-delay="500ms">
               <div class="member-image">
-                <img class="img-responsive" src="images/team/2.jpg" alt="" style="height:311px; width:100%">
+                <img class="img-responsive" src="{% static 'images/team/2.jpg' %}" alt="" style="height:311px; width:100%">
               </div>
               <div class="member-info">
                 <h3>Anastasia Novikova</h3>
@@ -281,7 +297,7 @@
           <div class="col-md-4">
             <div class="team-member wow flipInY" data-wow-duration="1000ms" data-wow-delay="800ms">
               <div class="member-image">
-                <img class="img-responsive" src="images/team/3.jpg" alt="" style="height:311px; width:100%"">
+                <img class="img-responsive" src="{% static 'images/team/3.jpg' %}" alt="" style="height:311px; width:100%"">
               </div>
               <div class="member-info">
                 <h3>Dmitry Choklya</h3>
@@ -344,8 +360,8 @@
               <div class="contact-info wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="300ms">
                 <ul class="address">
                   <li><i class="fa fa-map-marker"></i> <span> Address:</span> Moscow, Russia, Leninskie gory 1</li>
-                  <li><i class="fa fa-envelope"></i> <span> Email:</span><a href="mailto:someone@yoursite.com"> support@NeuroMag.com</a></li>
-                  <li><i class="fa fa-globe"></i> <span> Website:</span> <a href="#">www.neuromag.com</a></li>
+                  <li><i class="fa fa-envelope"></i> <span> Email:</span><a href="mailto:someone@yoursite.com"> support@blumix.me</a></li>
+                  <li><i class="fa fa-globe"></i> <span> Website:</span> <a href="#">www.blumix.me</a></li>
                 </ul>
               </div>                            
             </div>
@@ -358,7 +374,7 @@
     <div class="footer-top wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="300ms">
       <div class="container text-center">
         <div class="footer-logo">
-          <a href="index.html"><img class="img-responsive" src="images/logo.png" alt=""></a>
+          <a href="index.html"><img class="img-responsive" src="{% static 'images/photofix-logo.png' %}" alt=""></a>
         </div>
         <div class="social-icons">
           <ul>
@@ -376,7 +392,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-6">
-            <p>&copy; 2018 NeuroMag Theme.</p>
+            <p>&copy; 2018 PhotoFix Theme.</p>
           </div>
           <div class="col-sm-6">
             <p class="pull-right">Designed by <a href="http://www.themeum.com/">Me</a></p>
