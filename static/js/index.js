@@ -9,6 +9,21 @@ $.ajaxSetup({
 });
 
 
+function loadDefaultImage() {
+	img = document.getElementById("mainImage")
+	canvas = document.getElementById("canvas")
+	canvas.width = canvas.getBoundingClientRect().width
+	canvas.height = canvas.getBoundingClientRect().height
+
+	W = canvas.width
+	H = canvas.height
+
+	canvas.getContext('2d').drawImage(img,0,0, 
+		canvas.getBoundingClientRect().width,
+		canvas.getBoundingClientRect().height);
+}
+
+
 function initImage(input) {
         $('.button').show();
 	if (!(input.files && input.files[0])) {
@@ -24,9 +39,6 @@ function initImage(input) {
 
 
 		img.onload = function() {
-			W = img.width 
-        	H = img.height 
-
         	canvas.width = W
         	source.width = W
         	mask.width = W
@@ -44,10 +56,15 @@ function initImage(input) {
 		}
 
 		img.src = fileReader.result
+
+		$('#inpaintButton').prop("disabled", false)
+		$('#undoButton').prop("disabled", false)
+		$('#detectButton').prop("disabled", false)
+		$('#saveButton').prop("disabled", false)
 	}
 	fileReader.readAsDataURL(input.files[0])
 
-	document.getElementById("mainBlock").style.display = "block"
+	// document.getElementById("mainBlock").style.display = "block"
 }
 
 function clearMask() {
@@ -63,14 +80,18 @@ function clearMask() {
 }
 
 function wipePixels(event) {
+	var canvas = $("#canvas")
+
 	var ctx = document.getElementById("canvas").getContext("2d")
 	var image = ctx.getImageData(0, 0, W, H)
 	var data = image.data
 
 	var maskImage = maskCtx.getImageData(0, 0, W, H)
 
-	pos_x = event.offsetX?(event.offsetX):event.pageX-img.offsetLeft
-	pos_y = event.offsetY?(event.offsetY):event.pageY-img.offsetTop
+	var offset = canvas.offset()
+
+	pos_x = Math.trunc(event.pageX - offset.left)
+	pos_y = Math.trunc(event.pageY - offset.top)
 
 	// TODO: fix index out of bounds
 	for (var j = pos_x - r; j < pos_x + r; j++) {
